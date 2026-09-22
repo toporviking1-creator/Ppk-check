@@ -41,7 +41,7 @@ npm run build:single # всё приложение в одном файле dist
 ```
 
 Файл `dist-single/index.html` можно просто скопировать на планшет/компьютер и открыть в браузере —
-сервер не нужен. Workflow GitHub Actions публикует сборку на GitHub Pages при пуше в `main`
+сервер не нужен. Workflow GitHub Actions публикует сборку на GitHub Pages при пуше в основную ветку репозитория
 (включите Pages → Source: GitHub Actions в настройках репозитория).
 
 ## Структура
