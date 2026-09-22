@@ -48,6 +48,11 @@ export function useCases() {
     return c.id;
   }, []);
 
+  const insert = useCallback((c: Case) => {
+    setCases((cs) => [c, ...cs]);
+    return c.id;
+  }, []);
+
   const update = useCallback((id: string, fn: (c: Case) => Case) => {
     setCases((cs) => cs.map((c) => (c.id === id ? fn(c) : c)));
   }, []);
@@ -66,5 +71,5 @@ export function useCases() {
     return norm.length;
   }, []);
 
-  return { cases, create, update, remove, importCases, saveError };
+  return { cases, create, insert, update, remove, importCases, saveError };
 }

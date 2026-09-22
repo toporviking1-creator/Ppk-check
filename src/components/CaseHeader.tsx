@@ -32,7 +32,7 @@ export function CaseHeader(props: {
   const bv = bloodVolumeMl(c.patient.weightKg, c.patient.bvCoefMlKg);
   const timed = props.alerts.filter((a) => a.dueInMin !== undefined).sort((a, b) => a.dueInMin! - b.dueInMin!);
   const dangerCount = props.alerts.filter((a) => a.level === 'danger').length;
-  const elapsed = c.bleedingStart ? minutesBetween(c.bleedingStart, c.bleedingStop ? new Date(c.bleedingStop) : now) : undefined;
+  const elapsed = c.bleedingStart ? Math.max(0, minutesBetween(c.bleedingStart, c.bleedingStop ? new Date(c.bleedingStop) : now)) : undefined;
 
   return (
     <div className={`case-header sev-${sev} ${bleeding ? 'is-bleeding' : ''}`}>

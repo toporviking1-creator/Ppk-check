@@ -147,4 +147,45 @@ export interface Case {
   causes: string[];
   outcome: string;
   notes: string;
+  /** Учебный случай (режим тренировки). */
+  training?: TrainingState;
+}
+
+export type TrainingMessageKind = 'intro' | 'bloodloss' | 'vitals' | 'lab' | 'finding' | 'event' | 'warning';
+
+export interface TrainingMessage {
+  id: string;
+  at: string;
+  kind: TrainingMessageKind;
+  text: string;
+  /** Данные, которые можно внести в карту одной кнопкой. */
+  bloodLossMl?: number;
+  vitals?: Omit<VitalsEntry, 'id' | 'at'>;
+  lab?: Omit<LabEntry, 'id' | 'at'>;
+  applied?: boolean;
+}
+
+export interface TrainingState {
+  scenarioId: string;
+  /** Ускорение модельного времени: 0 — пауза, 1 — реальное время. */
+  speed: number;
+  /** Модельное время = simAnchor + (реальное − realAnchor) × speed. */
+  realAnchor: string;
+  simAnchor: string;
+  lastTickSim: string;
+  /** Истинная кровопотеря (модель), мл. */
+  trueLoss: number;
+  /** Ещё не озвученная кровопотеря, мл. */
+  carryMl: number;
+  lastReportSim: string;
+  lastVitalsSim: string;
+  /** Отложенные результаты анализов. */
+  pending: { dueAt: string; kind: 'lab' | 'leeWhite' | 'visco'; source: string }[];
+  /** Пункты, на которые уже выдана вводная (осмотр, запрос анализов). */
+  handled: string[];
+  messages: TrainingMessage[];
+  stoppedAt?: string;
+  /** Сколько раз обучаемый отметил остановку при продолжающемся кровотечении. */
+  falseStops: number;
+  finishedAt?: string;
 }

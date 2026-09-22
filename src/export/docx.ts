@@ -38,6 +38,7 @@ import {
 } from '../protocol/calc';
 import { QUALITY_CRITERIA, QUALITY_LABEL, qualityScore, qualityValue } from '../protocol/quality';
 import { isBleeding } from '../protocol/alerts';
+import { buildDebrief } from '../training/debrief';
 
 export interface ExportOptions {
   /** Пустой бланк для печати (без данных пациентки). */
@@ -158,6 +159,9 @@ export function buildDocument(c: Case, opts: ExportOptions = {}): Document {
       spacing: { after: 60 },
       children: [new TextRun({ text: 'ПРИ ПОСЛЕРОДОВОМ КРОВОТЕЧЕНИИ', font: FONT, size: 30, bold: true, color: ACCENT })],
     }),
+    ...(c.training && !blank
+      ? [p('УЧЕБНЫЙ СЛУЧАЙ (ТРЕНИРОВКА) — НЕ МЕДИЦИНСКИЙ ДОКУМЕНТ', { align: AlignmentType.CENTER, bold: true, color: ACCENT })]
+      : []),
     p(`Клинические рекомендации «${GUIDELINE.title}» (${GUIDELINE.year}). МКБ-10: ${GUIDELINE.icd}`, {
       align: AlignmentType.CENTER,
       size: SMALL,
@@ -242,6 +246,26 @@ export function buildDocument(c: Case, opts: ExportOptions = {}): Document {
         ['Компоненты крови (объём)', `${inf.blood} мл`],
       ]),
     );
+  }
+
+  const d = !blank ? buildDebrief(c) : undefined;
+  if (d) {
+    children.push(heading('Разбор тренировки'));
+    children.push(
+      kvTable([
+        ['Сценарий', d.scenarioTitle],
+        ['Итоговая оценка', `${d.score} из 100`],
+        ['Кровотечение', d.stopped ? 'остановлено' : 'не остановлено'],
+        ['Кровопотеря фактическая / внесённая', `${d.trueLoss} / ${d.documentedLoss} мл`],
+        ['Причина', `${d.causeText} — ${d.causeCorrect ? 'определена верно' : 'не определена'}`],
+      ]),
+    );
+    const rows = [
+      ...d.protocolTimers.map((r) => [r.label, r.minutes === undefined ? 'не выполнено' : `${Math.round(r.minutes)} мин`, r.targetMin ? `≤ ${r.targetMin} мин` : '', r.status === 'ok' ? 'в срок' : r.status === 'late' ? 'поздно' : 'нет']),
+      ...d.keyActions.map((r) => [r.label, r.minutes === undefined ? 'не выполнено' : `${Math.round(r.minutes)} мин`, '', '']),
+    ];
+    children.push(table(['Действие', 'Время', 'Срок КР', 'Итог'], rows, [50, 18, 16, 16]));
+    for (const e of [...d.errors, ...d.missedCritical.map((m) => `Пропущено: ${m}`)]) children.push(p(`• ${e}`, { size: SMALL + 2 }));
   }
 
   // 3. Бригада

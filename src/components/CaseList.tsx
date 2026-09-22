@@ -12,6 +12,7 @@ export function CaseList(props: {
   onCreate: () => void;
   onDelete: (id: string) => void;
   onImport: (cases: Partial<Case>[]) => number;
+  onTraining: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -42,6 +43,9 @@ export function CaseList(props: {
       <button className="btn danger huge" onClick={props.onCreate}>
         + Новая пациентка — начать чек-лист
       </button>
+      <button className="btn big training-start" onClick={props.onTraining}>
+        🎓 Тренировка по сценарию
+      </button>
 
       <section className="case-list">
         {props.cases.length === 0 && <p className="muted center">Случаев пока нет. Данные хранятся только на этом устройстве.</p>}
@@ -57,7 +61,7 @@ export function CaseList(props: {
                 </span>
                 <span className="small">
                   {totalBloodLoss(c)} мл · {SEVERITY_LABEL[sev]}
-                  {isBleeding(c) && <span className="badge danger"> идёт кровотечение</span>}
+                  {c.training ? <span className="badge"> 🎓 тренировка</span> : isBleeding(c) && <span className="badge danger"> идёт кровотечение</span>}
                 </span>
               </button>
               <button
