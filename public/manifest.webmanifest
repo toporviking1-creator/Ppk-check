@@ -1,0 +1,12 @@
+{
+  "name": "ПК-чек-лист — послеродовое кровотечение",
+  "short_name": "ПК-чек-лист",
+  "description": "Чек-лист у постели пациентки по КР «Послеродовое кровотечение» (2025) с выгрузкой в Word",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#b4232a",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
