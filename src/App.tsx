@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useCases } from './state/store';
 import type { Case } from './protocol/types';
 import { computeAlerts } from './protocol/alerts';
-import { markMassive, resumeBleeding, startBleeding, stopBleeding } from './state/actions';
+import { addBloodLoss, markMassive, removeEntry, resumeBleeding, startBleeding, stopBleeding } from './state/actions';
 import { CaseList } from './components/CaseList';
 import { CaseHeader } from './components/CaseHeader';
 import { Alerts } from './components/Alerts';
@@ -112,6 +112,15 @@ export default function App() {
           now={clock}
           alerts={alerts}
           onBack={() => go(undefined)}
+          onAddLoss={(ml) => act((c, t) => addBloodLoss(c, ml, 'gravimetric', t))}
+          onUndoLoss={
+            current.bloodLoss.length
+              ? () => {
+                  const last = [...current.bloodLoss].sort((a, b) => a.at.localeCompare(b.at)).at(-1)!;
+                  if (confirm(`Отменить последнюю запись: +${last.ml} мл?`)) act((c, t) => removeEntry(c, 'bloodLoss', last.id, t));
+                }
+              : undefined
+          }
           onStart={() => act((c, t) => startBleeding(c, t))}
           onStop={() => {
             if (confirm('Отметить остановку кровотечения?')) act((c, t) => stopBleeding(c, t));

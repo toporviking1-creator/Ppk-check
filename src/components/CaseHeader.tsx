@@ -21,6 +21,8 @@ export function CaseHeader(props: {
   onResume: () => void;
   onMassive: () => void;
   onBack: () => void;
+  onAddLoss: (ml: number) => void;
+  onUndoLoss?: () => void;
 }) {
   const { c, now } = props;
   const loss = totalBloodLoss(c);
@@ -95,6 +97,21 @@ export function CaseHeader(props: {
           )}
         </div>
       </div>
+      {!c.bleedingStop && (
+        <div className="ch-loss" role="group" aria-label="Добавить кровопотерю">
+          <span className="ch-loss-label">+ мл</span>
+          {[50, 100, 200, 300, 500].map((ml) => (
+            <button key={ml} className="btn small ch-loss-btn" onClick={() => props.onAddLoss(ml)}>
+              +{ml}
+            </button>
+          ))}
+          {props.onUndoLoss && (
+            <button className="btn small ghost ch-loss-undo" onClick={props.onUndoLoss} title="Отменить последнюю запись кровопотери" aria-label="Отменить последнюю запись кровопотери">
+              ↶
+            </button>
+          )}
+        </div>
+      )}
       {(timed.length > 0 || dangerCount > 0) && (
         <button className="ch-urgent" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           {dangerCount > 0 && <span className="badge-danger">⚠ {dangerCount}</span>}

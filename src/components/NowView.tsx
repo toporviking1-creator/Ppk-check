@@ -4,8 +4,7 @@ import type { ChecklistItem } from '../protocol/data';
 import { CAUSES } from '../protocol/data';
 import { nextSteps } from '../protocol/steps';
 import { DRUG_BY_ID } from '../protocol/drugs';
-import { lossPercent, totalBloodLoss } from '../protocol/calc';
-import { addBloodLoss, addMed, addVitals, setCheck, setNa, toggleCause, updatePatient } from '../state/actions';
+import { addMed, addVitals, setCheck, setNa, toggleCause, updatePatient } from '../state/actions';
 import type { Act } from './ChecklistView';
 import { NumField } from './ui';
 
@@ -13,8 +12,6 @@ export function NowView({ c, act, onFullChecklist }: { c: Case; act: Act; onFull
   const steps = nextSteps(c);
   const now = steps.slice(0, 3);
   const later = steps.slice(3, 9);
-  const loss = totalBloodLoss(c);
-  const pct = lossPercent(c);
 
   return (
     <div className="stack now">
@@ -23,21 +20,6 @@ export function NowView({ c, act, onFullChecklist }: { c: Case; act: Act; onFull
           <NumField label="Масса тела — для расчёта доз и % ОЦК" unit="кг" value={undefined} onChange={(v) => v && v > 20 && act((x, t) => updatePatient(x, { weightKg: v }, t))} />
         </div>
       )}
-
-      <div className="card now-loss">
-        <div className="now-loss-total">
-          <span className="label">Кровопотеря</span>
-          <span className="mono big-num">{loss}</span>
-          <span className="muted">мл{pct !== undefined ? ` · ${pct.toFixed(0)}% ОЦК` : ''}</span>
-        </div>
-        <div className="now-loss-btns">
-          {[100, 200, 300, 500].map((ml) => (
-            <button key={ml} className="btn big" onClick={() => act((x, t) => addBloodLoss(x, ml, 'gravimetric', t))}>
-              +{ml}
-            </button>
-          ))}
-        </div>
-      </div>
 
       <QuickVitals act={act} />
 
