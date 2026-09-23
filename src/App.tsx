@@ -16,6 +16,7 @@ import { ReportView } from './components/ReportView';
 import { useNow } from './components/ui';
 import { NowView } from './components/NowView';
 import { DebriefCard, ScenarioPicker, TrainingPanel } from './components/Training';
+import { KasView } from './components/KasView';
 import { advanceTraining, checkFalseStop, createTrainingCase, finishTraining, setSpeed, simTime } from './training/engine';
 
 type Tab = 'now' | 'checklist' | 'monitor' | 'labs' | 'meds' | 'patient' | 'ref' | 'report';
@@ -76,6 +77,14 @@ export default function App() {
 
   const alerts = useMemo(() => (current ? computeAlerts(current, clock) : []), [current, clock.getTime()]);
 
+  if (route.id === 'kas') {
+    return (
+      <main className="app">
+        <KasView onBack={() => go(undefined)} />
+      </main>
+    );
+  }
+
   if (!current) {
     return (
       <main className="app">
@@ -91,6 +100,7 @@ export default function App() {
         ) : (
         <CaseList
           onTraining={() => setPicking(true)}
+          onKas={() => go('kas')}
           cases={cases}
           onOpen={(id) => go(id)}
           onCreate={() => go(create(), 'now')}

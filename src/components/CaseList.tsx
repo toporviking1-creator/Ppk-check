@@ -13,6 +13,7 @@ export function CaseList(props: {
   onDelete: (id: string) => void;
   onImport: (cases: Partial<Case>[]) => number;
   onTraining: () => void;
+  onKas: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -45,6 +46,9 @@ export function CaseList(props: {
       </button>
       <button className="btn big training-start" onClick={props.onTraining}>
         🎓 Тренировка по сценарию
+      </button>
+      <button className="btn big kas-start" onClick={props.onKas}>
+        📝 КАС из эпикриза
       </button>
 
       <section className="case-list">
