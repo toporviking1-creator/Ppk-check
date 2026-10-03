@@ -1,8 +1,8 @@
 {
-  "name": "ktg-pro",
+  "name": "rodzal",
   "private": true,
   "version": "1.0.0",
-  "description": "КТГ-навигатор: физиологическая интерпретация КТГ, таймеры, тренажёр, справочник и выгрузка в Word",
+  "description": "Родзал: платформа клинических модулей для родильного зала — КТГ, послеродовое кровотечение, помощник, единый протокол в Word",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,8 @@
     "build:single": "tsc -b && vite build --mode single",
     "preview": "vite preview",
     "test": "vitest run",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "build:claude": "tsc -b && vite build --mode claude"
   },
   "dependencies": {
     "docx": "^9.7.1",

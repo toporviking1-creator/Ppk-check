@@ -1,5 +1,5 @@
 // Простой service worker: network-first для навигации, cache-first для статики.
-const CACHE = 'ktg-pro-v1';
+const CACHE = 'rodzal-v1';
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', './index.html', './manifest.webmanifest', './icon.svg'])));

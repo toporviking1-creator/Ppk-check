@@ -10,7 +10,7 @@ createRoot(document.getElementById('root')!).render(
 );
 
 // Офлайн-режим: service worker кэширует приложение (только при работе по http(s)).
-if ('serviceWorker' in navigator && location.protocol.startsWith('http') && import.meta.env.PROD && import.meta.env.MODE !== 'single') {
+if ('serviceWorker' in navigator && location.protocol.startsWith('http') && import.meta.env.PROD && import.meta.env.MODE === 'production') {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   });
