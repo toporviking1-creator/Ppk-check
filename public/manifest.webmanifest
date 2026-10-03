@@ -1,0 +1,12 @@
+{
+  "name": "КТГ-навигатор",
+  "short_name": "КТГ",
+  "description": "Физиологическая интерпретация КТГ, таймеры, тренажёр, справочник и протокол в Word",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d6b70",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
